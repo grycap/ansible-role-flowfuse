@@ -1,0 +1,6 @@
+---
+# vars file for flowfuse
+flowfuse_dir: "/opt/"
+flowfuse_installer_url: "https://github.com/FlowFuse/installer/releases/latest/download/flowforge-installer.zip"
+node_version: "20.x"
+host_ip: "ansible_default_ipv4.address"
