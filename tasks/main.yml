@@ -1,0 +1,74 @@
+---
+# tasks file for flowfuse
+    - name: Install geerlingguy.nodejs role
+      ansible.builtin.command: "ansible-galaxy role install geerlingguy.nodejs"
+
+    - name: Include geerlingguy.nodejs role
+      ansible.builtin.include_role:
+        name: geerlingguy.nodejs
+      vars:
+        nodejs_version: "{{ node_version }}"
+
+    - name: Install build tools
+      ansible.builtin.package:
+        name: build-essential
+        state: present
+
+    - name: Download FlowFuse Installer zip
+      ansible.builtin.get_url:
+        url: "{{ flowfuse_installer_url }}"
+        dest: "{{ flowfuse_dir }}flowforge-installer.zip"
+
+    - name: Unzip the installer
+      ansible.builtin.unarchive:
+        src: "{{ flowfuse_dir }}flowforge-installer.zip"
+        dest: "{{ flowfuse_dir }}"
+        remote_src: yes
+
+    - name: Create flowforge directory
+      ansible.builtin.file:
+        path: "{{ flowfuse_dir }}flowfuse"
+        state: directory
+        mode: 0755
+
+    - name: Move installer contents
+      ansible.builtin.shell:
+        cmd: "mv {{ flowfuse_dir }}flowforge-installer/* {{ flowfuse_dir }}flowfuse && rm -R {{ flowfuse_dir }}flowforge-installer"
+      args:
+        creates: "{{ flowfuse_dir }}flowfuse/app/"
+
+    - name: Create flowfuse group
+      ansible.builtin.group:
+        name: flowfuse
+        state: present
+
+    - name: Create flowfuse user
+      ansible.builtin.user:
+        name: flowfuse
+        group: flowfuse
+        createhome: no
+        system: yes
+        shell: /usr/sbin/nologin
+        state: present
+
+    - name: Install FlowFuse
+      ansible.builtin.command: "{{ flowfuse_dir }}flowfuse/install.sh"
+      args:
+        creates: "{{ flowfuse_dir }}flowfuse/app/node_modules"
+
+    - name: Change host in flowforge.yml
+      ansible.builtin.lineinfile:
+        path: "{{ flowfuse_dir }}flowfuse/etc/flowforge.yml"
+        regexp: '^host:'
+        line: 'host: 0.0.0.0'
+
+    - name: Change base_url in flowforge.yml
+      ansible.builtin.lineinfile:
+        path: "{{ flowfuse_dir }}flowfuse/etc/flowforge.yml"
+        regexp: '^base_url:'
+        line: 'base_url: {{ host_ip }}'
+
+    - name: Run the FlowFuse service
+      ansible.builtin.systemd:
+        name: flowfuse
+        state: started
