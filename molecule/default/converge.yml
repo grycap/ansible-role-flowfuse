@@ -1,0 +1,19 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: true
+  tasks:
+
+    - name: "Include grycap.flowfuse"
+      include_role:
+        name: "ansible-role-flowfuse"
+      vars:
+        nodejs_version: "{{ node_version }}"
+
+    - name: Check if Flowfuse service is running on port 3000
+      wait_for:
+        host: 127.0.0.1
+        port: 3000
+        timeout: 100
+        state: started
+      ignore_errors: true

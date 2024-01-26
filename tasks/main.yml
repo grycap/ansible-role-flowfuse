@@ -1,14 +1,5 @@
 ---
 # tasks file for flowfuse
-    - name: Install geerlingguy.nodejs role
-      ansible.builtin.command: "ansible-galaxy role install geerlingguy.nodejs"
-
-    - name: Include geerlingguy.nodejs role
-      ansible.builtin.include_role:
-        name: geerlingguy.nodejs
-      vars:
-        nodejs_version: "{{ node_version }}"
-
     - name: Install build tools
       ansible.builtin.package:
         name: build-essential
