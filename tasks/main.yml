@@ -2,19 +2,20 @@
 # tasks file for flowfuse
     - name: Install build tools
       ansible.builtin.package:
-        name: build-essential
+        name: [build-essential, unzip]
         state: present
 
     - name: Download FlowFuse Installer zip
       ansible.builtin.get_url:
         url: "{{ flowfuse_installer_url }}"
         dest: "{{ flowfuse_dir }}flowforge-installer.zip"
-
+        
     - name: Unzip the installer
       ansible.builtin.unarchive:
         src: "{{ flowfuse_dir }}flowforge-installer.zip"
         dest: "{{ flowfuse_dir }}"
         remote_src: yes
+        creates: "{{ flowfuse_dir }}flowfuse"
 
     - name: Create flowforge directory
       ansible.builtin.file:
