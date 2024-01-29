@@ -9,11 +9,11 @@
         update_cache: yes
       when: ansible_os_family == "Debian"
 
-        #- name: Update cache on Red Hat
-        #yum:
-        #name: '*'
-        #state: latest
-        #when: ansible_os_family == "RedHat"
+    - name: Update cache on Red Hat
+      yum:
+        name: '*'
+        state: latest
+      when: ansible_os_family in ["RedHat", "CentOS"]
 
     - name: "Include grycap.flowfuse"
       include_role:
