@@ -4,6 +4,15 @@
       ansible.builtin.package:
         name: [build-essential, unzip]
         state: present
+      when:
+        - ansible_os_family in ['Debian', 'Ubuntu']
+
+    - name: Install development tools and unzip on Red Hat
+      ansible.builtin.package:
+        name: ['gcc', 'gcc-c++', 'make', 'unzip']
+        state: present
+      when:
+        - ansible_os_family in ['RedHat', 'CentOS']
 
     - name: Download FlowFuse Installer zip
       ansible.builtin.get_url:
