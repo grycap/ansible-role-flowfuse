@@ -13,7 +13,7 @@
       yum:
         name: '*'
         state: latest
-      when: ansible_os_family in ["RedHat", "CentOS"]
+      when: ansible_os_family in ["RedHat", 'CentOS', 'CentOS Linux', 'CentOS Stream']
 
     - name: "Include grycap.flowfuse"
       include_role:
