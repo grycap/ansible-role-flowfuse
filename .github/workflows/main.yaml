@@ -18,7 +18,6 @@ jobs:
       matrix:
         distro:
           - centos8
-          - rockylinux9
           - ubuntu2004
           - ubuntu2204
 

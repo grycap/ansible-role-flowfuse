@@ -12,7 +12,7 @@
         name: ['gcc', 'gcc-c++', 'make', 'unzip']
         state: present
       when:
-        - ansible_os_family in ['RedHat', 'CentOS']
+        - ansible_os_family == 'CentOS'
 
     - name: Download FlowFuse Installer zip
       ansible.builtin.get_url:
