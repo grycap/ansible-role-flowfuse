@@ -9,7 +9,7 @@
         update_cache: yes
       when: ansible_os_family == "Debian"
 
-    - name: "Include grycap.flowfuse"
+    - name: Include grycap.flowfuse
       include_role:
         name: "ansible-role-flowfuse"
       vars:

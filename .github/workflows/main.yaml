@@ -17,8 +17,7 @@ jobs:
     strategy:
       matrix:
         distro:
-          #- centos8
-          #- rockylinux9
+          - centos8
           - ubuntu2004
           - ubuntu2204
 
